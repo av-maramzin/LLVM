@@ -13,23 +13,23 @@ fi
 echo "LLVM folder: $SCRIPT_DIR"
 echo "LLVM repository: $LLVM_PROJECT_DIR"
 echo "LLVM build directory: $BUILD_DIR"
+echo "LLVM build directory: $DEBUG_BUILD_DIR"
 echo ""
 
 if [ -d "$BUILD_DIR" ]; then
     echo "Removing existent build directory"
+    echo "Removed: $BUILD_DIR"
     rm -rf $BUILD_DIR
 fi
 
-mkdir $BUILD_DIR
+if [ -d "$DEBUG_BUILD_DIR" ]; then
+    echo "Removing existent build directory"
+    echo "Removed: $DEBUG_BUILD_DIR"
+    rm -rf $DEBUG_BUILD_DIR
+fi
 
-cd $BUILD_DIR
-cmake -G "Ninja"\
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo\
-    -DLLVM_TARGETS_TO_BUILD="X86"\
-    -DLLVM_ENABLE_CXX1Y=ON\
-    -DBUILD_SHARED_LIBS=ON\
-    -DLLVM_ENABLE_ASSERTIONS=ON\
-    -DCMAKE_CXX_FLAGS="-std=c++14"\
-    $LLVM_PROJECT_DIR
-cmake --build .
+echo "LLVM repository: checking out the master branch"
+cd $LLVM_PROJECT_DIR
+git checkout master
+
 cd $SCRIPT_DIR
